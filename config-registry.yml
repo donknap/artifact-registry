@@ -1,0 +1,27 @@
+version: 0.1
+log:
+  accesslog:
+    disabled: true
+  fields:
+    service: registry
+storage:
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+http:
+  addr: :5000
+  headers:
+    X-Content-Type-Options: [nosniff]
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
+    threshold: 3
+auth:
+  token:
+    autoredirect: true
+    realm: http://127.0.0.1:5001/auth
+    service: 'Registry Realm'
+    issuer: 'Acme auth server'
+    rootcertbundle: /home/root-certificate.pem

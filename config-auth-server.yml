@@ -1,0 +1,52 @@
+# This config lists all the possible config options.
+#
+# To configure Docker Registry to talk to this server, put the following in the registry config file:
+#
+#  auth:
+#    token:
+#      realm: "https://127.0.0.1:5001/auth"
+#      service: "Docker registry"
+#      issuer: "Acme auth server"
+#      autoredirect: false
+#      rootcertbundle: "/path/to/server.pem"
+
+server:  # Server settings.
+  # Address to listen on.
+  # Can be HOST:PORT for TCP or file path (e.g. /run/docker_auth.sock) for Unix socket.
+  addr: ":5001"
+
+  # Network, can be "tcp" or "unix" ("tcp" if unspecified).
+  net: "tcp"
+
+  # URL path prefix to use.
+  path_prefix: ""
+
+
+token:  # Settings for the tokens.
+  issuer: "Acme auth server"  # Must match issuer in the Registry config.
+  expiration: 900
+  # Token must be signed by a certificate that registry trusts, i.e. by a certificate to which a trust chain
+  # can be constructed from one of the certificates in registry's auth.token.rootcertbundle.
+  # If not specified, server's TLS certificate and key are used.
+  certificate: "/home/root-certificate.pem"
+  key: "/home/root-key.pem"
+
+# Authentication methods. All are tried, any one returning success is sufficient.
+# At least one must be configured. If you want an unauthenticated public setup,
+# configure static user map with anonymous access.
+
+# Static user map.
+# Static user map.
+users:
+  # Password is specified as a BCrypt hash. Use `htpasswd -nB USERNAME` to generate.
+  "${USERNAME}":
+    password: "${PASSWORD}"  # badmin
+  "": {}  # Allow anonymous (no "docker login") access.
+acl:
+  - match: {account: "${USERNAME}"}
+    actions: ["*"]
+    comment: "Admin has full access to everything."
+  - match: {account: "", name: "*"}
+    actions: ["pull"]
+    comment: "Anonymous users can pull."
+  # Access is denied by default.
