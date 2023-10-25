@@ -46,7 +46,7 @@ acl:
   - match: {account: "${USERNAME}"}
     actions: ["*"]
     comment: "Admin has full access to everything."
-  - match: {account: "", name: "*"}
+  - match: {account: "", name: "/${PUBLIC_NAMESPACE}/"}
     actions: ["pull"]
     comment: "Anonymous users can pull."
   # Access is denied by default.

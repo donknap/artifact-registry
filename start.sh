@@ -23,7 +23,7 @@ echo $PASSWORD
 
 replace_var "USERNAME" "$REGISTRY_USERNAME"
 replace_var "PASSWORD" "$PASSWORD"
-
+replace_var "PUBLIC_NAMESPACE" "$PUBLIC_NAMESPACE"
 
 
 chmod 755 /docker-entrypoint.d/90-docker-registry-ui.sh && \

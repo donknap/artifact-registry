@@ -8,7 +8,7 @@ build-auth: clean
 	docker run -it --rm --name build -v "${BASE_PASTH}/source-auth":/home -w /home/auth_server golang:1.21-alpine3.18 sh -c "apk add --no-cache ca-certificates make git gcc musl-dev binutils-gold openssl && make build"
 	cp ./source-auth/auth_server/auth_server ./auth-server
 publish: clean 
-	zip -r w7_registry_${FILE_NAME}.zip ./Dockerfile nginx/default.conf start.sh
+	zip -r w7_registry_${FILE_NAME}.zip ./Dockerfile auth-server config-auth-server.yml nginx/default.conf root-certificate.pem root-key.pem start.sh
 test:
 	docker build -t cd-artifact:v1.0.0 .
 	docker run -d -it --name cd-artifact-app -p 8081:80 -p 5001:5001 -p 5000:5000 -e ENABLE_PUBLIC_PULL=2 -e DOMAIN_URL=http://172.16.1.198:8081 cd-artifact:v1.0.0
